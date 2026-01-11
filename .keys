@@ -1,0 +1,91 @@
+# ---------------------------------------------------------
+# 1. 一覧表示コマンド (keys)
+# ---------------------------------------------------------
+alias keys='echo "
+📌 【マイ・ショートカット備忘録】
+
+■ ターミナル操作
+  command + t : 新規タブ
+　command + n : 新規window
+　command + [数字] : タブの切り替え
+　command + option + [数字] : windowの切り替え
+  command + k : ターミナル表示消す
+
+■ タブ操作 (Tab / File)
+  te [file]  : 新規タブで開く (Tab Edit)
+  gn         : 次のタブへ (Go Next)
+  gp         : 前のタブへ (Go Previous)
+  tx         : タブを閉じる (Tab X)
+
+■ 全体操作 / 編集
+　:e　　　　 : テキストファイルを作成（テキストファイルがない場合）
+　:!mkdir    : 親ディレクトリの作成
+　:w　　　　 : ファイルを保存
+  gg         : 文頭へ移動
+  G          : 文末へ移動
+  V + G      : 文頭から文末まで全選択
+  :%y        : 全コピー (All Yank)
+  :%d        : 全削除 (All Delete)
+  gd         : 定義ジャンプ (Go Definition)
+  :lua vim.lsp.buf.format() : コード整形
+
+■ コピー＆ペースト
+  yy         : 1行コピー
+  p          : 貼り付け
+  v -> y     : 範囲選択してコピー
+
+■ 検索 (Telescope等)
+  Space f f  : ファイル検索
+  Space f g  : 文字検索 (Grep)
+
+■ ファイルを開く時 (検索画面など)
+  Enter      : 現在の窓で開く
+  Ctrl + v   : 左右に分割して開く (Vertical)
+  Ctrl + x   : 上下に分割して開く
+  Ctrl + t   : 新規タブで開く
+
+■ 基本・移動
+  jk          : 挿入モードを抜ける
+  <leader>nh  : 検索ハイライトを消す
+
+■ 画面分割
+  <leader>sv  : 画面を左右に分割
+  <leader>sh  : 画面を上下に分割
+  Ctrl + w + h/j/k/l : 画面間を移動
+  option + commnd + テンキー：画面間を移動
+  :p          : 画面分割したタブを削除
+
+■ 検索 (Telescope)
+  <leader>f   : ファイル名検索
+  <leader><leader> : プロジェクト内文字検索
+  <leader>p   : プロジェクト切替
+  <leader>?   : 自作ショートカット一覧
+
+■ 開発ツール
+  <leader>g   : Lazygit起動
+  pj [名前]   : プロジェクト移動＆起動
+
+
+
+--------------------------------------
+💡 「find-key 検索ワード」で絞り込み検索ができます
+"'
+
+# ---------------------------------------------------------
+# 2. 検索コマンド (find-key)
+# ---------------------------------------------------------
+find_key() {
+    # keys の中身から grep で検索（色付き）
+    keys | grep -i --color=auto "$1"
+}
+
+# ショートカットキーを検索
+alias fk='find_key'
+
+# エイリアス集を編集するコマンド
+alias edkey='nvim ~/.shortcuts'
+
+# 編集した内容を今すぐ反映させるコマンド
+alias rekey='source ~/.shortcuts && echo "✅ Shortcuts updated!"'
+
+
