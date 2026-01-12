@@ -44,6 +44,20 @@ keymap.set("i", "<C-z>", "<Esc>ui", { desc = "Undo in insert mode" })
 -- ノーマルモードの Command + z もついでに設定
 keymap.set("n", "<D-z>", "u", { desc = "Undo" })
 
+-- 前のファイル（ジャンプ）へ
+keymap.set("n", "<A-Left>", "<C-o>", { noremap = true, silent = true })
+
+-- 次のファイル（ジャンプ）へ
+keymap.set("n", "<A-Right>", "<C-i>", { noremap = true, silent = true })
+
+-- タブを開く → ⌘T
+keymap.set("n", "<D-t>", ":tabedit<CR>", { desc = "新しいタブを開く" })
+
+-- ⌘D → 定義ジャンプ
+keymap.set("n", "<D-d>", function()
+  vim.lsp.buf.definition({ reuse_win = true })
+end, { desc = "Go to definition" })
+
 -- スペース + g で Lazygit を起動
 keymap.set("n", "<leader>g", ":LazyGit<CR>", { desc = "Lazygitを起動 (Git操作)" })
 
@@ -58,20 +72,26 @@ end, { desc = "プロジェクトを切り替える" })
 keymap.set("i", "<D-z>", "<Esc>ui", { desc = "挿入モードで元に戻す" })
 keymap.set("i", "<C-z>", "<Esc>ui", { desc = "挿入モードで元に戻す" }) 
 
--- 背景を透かしてぼかす (キー入力: Space + tr)
-vim.keymap.set('n', '<leader>tr', function()
-  -- プロファイルを「Glass」に切り替える命令を送る
-  vim.fn.system([[printf "\e]50;SetProfile=Glass\a"]])
-  -- Neovim自体の背景（色）を消すプラグインを実行
-  pcall(vim.cmd, "TransparentEnable")
-  print("Glass Mode On")
-end, { desc = "背景を透明化してぼかす" })
 
--- 背景を真っ黒に戻す (キー入力: Space + ts)
-vim.keymap.set('n', '<leader>ts', function()
-  -- プロファイルを「Default」に戻す命令を送る
-  vim.fn.system([[printf "\e]50;SetProfile=Default\a"]])
-  -- Neovim自体の背景（色）を元に戻す
-  pcall(vim.cmd, "TransparentDisable")
-  print("Glass Mode Off")
-end, { desc = "背景を不透明に戻す" })
+-- ALT + n: 次のタブへ移動（WezTermのウィンドウ切り替えに対応）
+keymap.set("n", "<A-n>", ":tabnext<CR>", { desc = "次のタブへ（WezTerm互換）" })
+
+-- ALT + SHIFT + RightArrow: 垂直分割（左右分割）
+keymap.set("n", "<A-S-Right>", "<C-w>v", { desc = "垂直分割（WezTerm互換）" })
+
+-- ALT + SHIFT + DownArrow: 水平分割（上下分割）
+keymap.set("n", "<A-S-Down>", "<C-w>s", { desc = "水平分割（WezTerm互換）" })
+
+-- ALT + CMD + 矢印キー: ペイン間を移動
+keymap.set("n", "<A-D-Left>", "<C-w>h", { desc = "左のペインへ移動（WezTerm互換）" })
+keymap.set("n", "<A-D-Right>", "<C-w>l", { desc = "右のペインへ移動（WezTerm互換）" })
+keymap.set("n", "<A-D-Up>", "<C-w>k", { desc = "上のペインへ移動（WezTerm互換）" })
+keymap.set("n", "<A-D-Down>", "<C-w>j", { desc = "下のペインへ移動（WezTerm互換）" })
+
+-- ALT + x: 現在のペインを閉じる
+keymap.set("n", "<A-x>", "<C-w>c", { desc = "ペインを閉じる（WezTerm互換）" })
+
+-- Option + Shift + F でコード整形
+keymap.set({"n", "v", "i"}, "<M-S-f>", function()
+  require("conform").format({ async = true, lsp_fallback = true })
+end, { desc = "Format code" })
