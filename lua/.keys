@@ -47,6 +47,8 @@ alias keys='echo "
 ■ 検索 (Telescope等)
   Space f f  : ファイル検索
   Space f g  : 文字検索 (Grep)
+  g r        : 参照先の検索
+  g d        : 定義先の検索
 
 ■ ファイルを開く時 (検索画面など)
   Enter      : 現在の窓で開く

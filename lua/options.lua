@@ -11,3 +11,5 @@ opt.tabstop = 4             -- タブの表示幅を4に
 opt.expandtab = true        -- タブをスペースに変換
 opt.clipboard = "unnamedplus" -- Macのクリップボードと同期
 opt.cursorline = true       -- 現在の行を強調
+opt.hlsearch = true         -- 検索結果をハイライト
+opt.incsearch = true        -- インクリメンタル検索（入力中にリアルタイムで検索）

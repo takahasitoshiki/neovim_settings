@@ -58,6 +58,14 @@ keymap.set("n", "<D-d>", function()
   vim.lsp.buf.definition({ reuse_win = true })
 end, { desc = "Go to definition" })
 
+-- gr → 参照箇所一覧を小窓(Telescope)で表示（VSCode の「参照の検索」に近い動き）
+keymap.set("n", "gr", function()
+  require("telescope.builtin").lsp_references({
+    include_declaration = false,  -- 定義そのものはリストから除外
+    show_line = true,
+  })
+end, { desc = "Show LSP references (Telescope)" })
+
 -- スペース + g で Lazygit を起動
 keymap.set("n", "<leader>g", ":LazyGit<CR>", { desc = "Lazygitを起動 (Git操作)" })
 
@@ -95,3 +103,38 @@ keymap.set("n", "<A-x>", "<C-w>c", { desc = "ペインを閉じる（WezTerm互�
 keymap.set({"n", "v", "i"}, "<M-S-f>", function()
   require("conform").format({ async = true, lsp_fallback = true })
 end, { desc = "Format code" })
+
+-- エンター2回で検索プロンプトを表示（検索文字列が見やすく表示される）
+local enter_timer = nil
+
+keymap.set("n", "<CR>", function()
+  if enter_timer then
+    -- 2回目のエンター：検索プロンプトを表示
+    vim.fn.timer_stop(enter_timer)
+    enter_timer = nil
+    
+    -- ノーマルモードに確実に戻す
+    if vim.fn.mode() ~= "n" then
+      vim.cmd("normal! <Esc>")
+    end
+    
+    -- 検索ハイライトを有効にする
+    vim.opt.hlsearch = true
+    
+    -- 検索プロンプトを表示（コマンドラインで検索を開始）
+    -- feedkeysを使うことで、検索プロンプトが正しく表示される
+    vim.schedule(function()
+      vim.fn.feedkeys("/", "t")
+    end)
+  else
+    -- 1回目のエンター：タイマーを開始
+    enter_timer = vim.fn.timer_start(500, function()
+      -- タイマーが切れたら通常のエンター動作
+      enter_timer = nil
+      -- ノーマルモードで通常のエンター動作を実行
+      vim.schedule(function()
+        vim.cmd("normal! <CR>")
+      end)
+    end)
+  end
+end, { noremap = true, desc = "Enter twice to search" })
