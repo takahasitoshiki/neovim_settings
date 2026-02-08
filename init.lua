@@ -28,5 +28,8 @@ require("keymaps")
 -- pluginsフォルダの中身を読み込む設定
 require("lazy").setup("plugins")
 
+-- フォーカス時・Insert終了時に半角へ切り替え（macOS）
+require("ime")
+
 vim.opt.clipboard = "unnamedplus"
 

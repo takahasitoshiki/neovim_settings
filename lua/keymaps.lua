@@ -30,6 +30,10 @@ keymap.set("n", "<C-a>", "ggVG", { desc = "Select all" })
 -- Command + a を全選択にする設定（環境によって動作しない場合があります）
 keymap.set("n", "<D-a>", "ggVG", { desc = "Select all" })
 keymap.set("v", "<D-a>", "<Esc>ggVG", { desc = "Select all" })
+
+-- Visualモードで Option+↑/↓ で選択行を上下に移動（行単位）
+keymap.set("v", "<A-Down>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
+keymap.set("v", "<A-Up>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 keymap.set("i", "<D-a>", "<Esc>ggVG", { desc = "Select all" })
 
 -- スペース + ya で全コピー
@@ -66,8 +70,30 @@ keymap.set("n", "gr", function()
   })
 end, { desc = "Show LSP references (Telescope)" })
 
--- スペース + g で Lazygit を起動
-keymap.set("n", "<leader>g", ":LazyGit<CR>", { desc = "Lazygitを起動 (Git操作)" })
+-- スペース + t でターミナルを開閉（tt は t モーションと競合するため leader に変更）
+-- ターミナル内で Esc（ノーマルモードに入ってからもう一度 Esc）で閉じる
+keymap.set("n", "<leader>t", "<cmd>ToggleTerm<CR>", { desc = "Toggle terminal" })
+
+-- スペース + c + e でその行のパス・行番号・エラー内容をクリップボードにコピー
+keymap.set("n", "<leader>ce", function()
+  local path = vim.fn.expand("%:p")
+  if path == "" then
+    path = "[No Name]"
+  end
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line_str = path .. ":" .. row
+  if col > 1 then
+    line_str = line_str .. ":" .. col
+  end
+  local diags = vim.diagnostic.get(0, { lnum = row - 1 })
+  local parts = { line_str }
+  for _, d in ipairs(diags) do
+    table.insert(parts, (d.message:gsub("\n", " "):gsub("%s+", " "):match("^%s*(.-)%s*$")))
+  end
+  local text = table.concat(parts, " - ")
+  vim.fn.setreg("+", text)
+  vim.notify("コピーしました: " .. (text:len() > 60 and text:sub(1, 60) .. "..." or text), vim.log.levels.INFO)
+end, { desc = "Copy path, line number, and error to clipboard" })
 
 -- スペース + p (Project) でプロジェクト一覧を表示
 -- 選択するとそのディレクトリに移動(cd)してファイル検索が開きます

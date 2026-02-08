@@ -13,3 +13,6 @@ opt.clipboard = "unnamedplus" -- Macのクリップボードと同期
 opt.cursorline = true       -- 現在の行を強調
 opt.hlsearch = true         -- 検索結果をハイライト
 opt.incsearch = true        -- インクリメンタル検索（入力中にリアルタイムで検索）
+opt.cursorline = true       -- 現在の行を強調
+opt.wrap = false            -- 行を折り返さない
+opt.hlsearch = true        -- 検索結果をハイライト

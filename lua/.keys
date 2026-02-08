@@ -12,7 +12,8 @@ alias keys='echo "
   option + x           : 現在のペインを閉じる
   control + l : 画面をキレイにする
   shift + commnd + i : 背景を透過
- 
+  option + n : ウインドウの移動
+
 ■ タブ操作 (Tab / File)
   te [file]  : 新規タブで開く (Tab Edit)
   gn         : 次のタブへ (Go Next)
