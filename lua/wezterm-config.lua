@@ -1,13 +1,11 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
-config.front_end = "Software"
 config.automatically_reload_config = true
 config.font_size = 12.0
--- ターミナルにフォーカスがあるときは半角（ASCII）入力にする
-config.use_ime = false
+config.use_ime = true
 config.window_decorations = "RESIZE"
-config.hide_tab_bar_if_only_one_tab = false
+config.hide_tab_bar_if_only_one_tab = true
 
 config.font = wezterm.font("JetBrains Mono", { weight = "Regular" })
 config.font_size = 13.0
@@ -119,17 +117,6 @@ config.keys = {
         action = wezterm.action.CloseCurrentPane { confirm = false },
     },
 }
-
--- ウィンドウがフォーカスされた時に実行する処理
-wezterm.on('window-focus-changed', function(window)
-    -- フォーカスを得た時(true)だけ実行
-    if window:is_focused() then
-        -- macOSの場合 (im-selectを使用)
-        window:run_child_process({ '/usr/local/bin/im-select', 'com.apple.keylayout.ABC' })
-        -- Windowsの場合 (zenhan.exeを使用)
-        -- window:run_child_process({ 'zenhan.exe', '0' })
-    end
-end)
 
 
 
